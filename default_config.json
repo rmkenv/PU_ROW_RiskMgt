@@ -1,0 +1,169 @@
+{
+  "system": {
+    "name": "Power Utility ROW Risk Management System",
+    "version": "1.0.0",
+    "debug": false,
+    "log_level": "INFO"
+  },
+  "data_sources": {
+    "satellite": {
+      "sentinel2": {
+        "enabled": true,
+        "api_url": "https://scihub.copernicus.eu/dhus/",
+        "cloud_cover_max": 20,
+        "resolution": 10,
+        "bands": ["B04", "B08", "B11", "B12"]
+      },
+      "landsat": {
+        "enabled": true,
+        "api_url": "https://landsatlook.usgs.gov/",
+        "cloud_cover_max": 15,
+        "resolution": 30,
+        "bands": ["SR_B4", "SR_B5", "SR_B6", "SR_B7"]
+      }
+    },
+    "lidar": {
+      "usgs_3dep": {
+        "enabled": true,
+        "api_url": "https://cloud.nationalmap.gov/arcgis/rest/services/",
+        "point_density_min": 0.5,
+        "quality_level": "QL2"
+      }
+    },
+    "weather": {
+      "noaa": {
+        "enabled": true,
+        "api_url": "https://api.weather.gov/",
+        "parameters": ["temperature", "precipitation", "wind_speed", "humidity"]
+      },
+      "openweather": {
+        "enabled": false,
+        "api_url": "https://api.openweathermap.org/data/2.5/",
+        "api_key": "your_api_key_here"
+      }
+    }
+  },
+  "analysis_parameters": {
+    "vegetation": {
+      "ndvi_threshold": 0.7,
+      "ndvi_change_threshold": 0.1,
+      "growth_rate_threshold": 0.05,
+      "seasonal_adjustment": true
+    },
+    "canopy_height": {
+      "height_threshold": 15.0,
+      "clearance_zones": {
+        "69kv": 3.05,
+        "138kv": 4.6,
+        "230kv": 6.1,
+        "345kv": 8.5,
+        "500kv": 12.2,
+        "765kv": 18.3
+      }
+    },
+    "risk_factors": {
+      "vegetation_weight": 0.35,
+      "wildfire_weight": 0.25,
+      "flood_weight": 0.20,
+      "landslide_weight": 0.20
+    },
+    "buffer_distances": {
+      "analysis_buffer": 100,
+      "risk_buffer": 500,
+      "notification_buffer": 1000
+    }
+  },
+  "risk_thresholds": {
+    "wildfire": {
+      "low": 0.3,
+      "medium": 0.6,
+      "high": 0.8,
+      "extreme": 0.95
+    },
+    "flood": {
+      "low": 0.2,
+      "medium": 0.5,
+      "high": 0.7,
+      "extreme": 0.9
+    },
+    "landslide": {
+      "low": 0.25,
+      "medium": 0.55,
+      "high": 0.75,
+      "extreme": 0.9
+    },
+    "integrated": {
+      "low": 0.3,
+      "medium": 0.6,
+      "high": 0.8,
+      "critical": 0.95
+    }
+  },
+  "machine_learning": {
+    "models": {
+      "vegetation_growth": {
+        "algorithm": "xgboost",
+        "parameters": {
+          "n_estimators": 100,
+          "max_depth": 6,
+          "learning_rate": 0.1
+        }
+      },
+      "risk_prediction": {
+        "algorithm": "random_forest",
+        "parameters": {
+          "n_estimators": 200,
+          "max_depth": 10,
+          "min_samples_split": 5
+        }
+      }
+    },
+    "feature_selection": {
+      "enabled": true,
+      "method": "recursive_feature_elimination",
+      "n_features": 20
+    }
+  },
+  "reporting": {
+    "output_formats": ["html", "pdf", "json"],
+    "map_styles": {
+      "base_map": "OpenStreetMap",
+      "risk_colormap": "RdYlBu_r",
+      "vegetation_colormap": "RdYlGn"
+    },
+    "notification_thresholds": {
+      "immediate": 0.9,
+      "urgent": 0.7,
+      "moderate": 0.5
+    }
+  },
+  "data_processing": {
+    "parallel_processing": {
+      "enabled": true,
+      "n_workers": -1,
+      "chunk_size": 1000
+    },
+    "caching": {
+      "enabled": true,
+      "cache_dir": "./cache",
+      "max_cache_size_gb": 10
+    },
+    "coordinate_systems": {
+      "input_crs": "EPSG:4326",
+      "processing_crs": "EPSG:3857",
+      "output_crs": "EPSG:4326"
+    }
+  },
+  "quality_control": {
+    "data_validation": {
+      "geometry_checks": true,
+      "attribute_validation": true,
+      "spatial_consistency": true
+    },
+    "accuracy_thresholds": {
+      "vegetation_detection": 0.85,
+      "risk_classification": 0.80,
+      "change_detection": 0.75
+    }
+  }
+}
