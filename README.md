@@ -301,9 +301,9 @@ If you use this software in your research, please cite:
 ```bibtex
 @software{row_risk_manager_2025,
   title={Power Utility ROW Risk Management System},
-  author={Your Name and Contributors},
+  author={Rysn Kmetz},
   year={2025},
-  url={https://github.com/yourusername/power-utility-row-risk-management},
+  url={https://github.com/rmkenv/PU_ROW_RiskMgt},
   version={1.0.0}
 }
 ```
@@ -326,6 +326,3 @@ If you use this software in your research, please cite:
 
 ---
 
-**Built with ❤️ for the power utility industry**
-
-![Workflow Diagram](https://raw.githubusercontent.com/yourusername/power-utility-row-risk-management/main/docs/images/workflow_diagram.png)
